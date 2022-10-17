@@ -81,13 +81,27 @@ class ProductsContainer {
     }
 
     deleteById = async (req, res) => {
+
       const { Id } = req.params;
+
       const products = await this.listProd();
-      const productIndex = products.findIndex((producto) => producto.id === +Id);
+
+      console.log(products)
+
+      const productIndex = products.products.findIndex((producto) => producto.id === +Id); //el primer products es objeto, el segundo es array
+
       if (productIndex < 0) 
+
       return res.status(404).json({ success: false, error: `Producto id: ${Id} no encontrado`});
-      products.splice(productIndex, 1);
-      return res.json({ success: true, result: 'Producto Eliminado'});      
+
+      products.products.splice(productIndex, 1);  //el primer products es objeto, el segundo es array
+
+      fs.writeFile('./models/data.json', products, 'utf-8');
+
+      return res.json({ success: true, result: 'Producto Eliminado'});
+      
+      
+
     }
   }  
   module.exports = ProductsContainer;
